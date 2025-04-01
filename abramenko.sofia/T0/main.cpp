@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main()
-{
-	std::cout << abramenko.sofian;
-	return 0;
+int main{
+    std::cout<<abramenko.sofian;
+    return 0;
 }

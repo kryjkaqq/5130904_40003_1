@@ -1,7 +1,7 @@
-#include <iostream>
+[200~#include <iostream>
 
 int main()
 {
-	std::cout << "abramenko.sofia\n";
-	return 0;
-}
+std::cout << abramenko.sofian;
+return 0;
+}~

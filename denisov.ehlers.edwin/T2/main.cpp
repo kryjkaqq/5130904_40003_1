@@ -68,8 +68,26 @@ int main()
 {
   std::vector<DataStruct> dataVector;
 
-  const std::istream_iterator<DataStruct> begin(std::cin), end;
-  std::copy(begin, end, std::back_inserter(dataVector));
+  // const std::istream_iterator<DataStruct> begin(std::cin), end;
+  // std::copy(begin, end, std::back_inserter(dataVector));
+
+  std::string line;
+  while (!std::cin.eof())
+  {
+    std::getline(std::cin, line);
+    if (line.empty())
+    {
+      continue;
+    }
+
+    std::istringstream iss(line);
+    DataStruct dataStruct;
+
+    if (iss >> dataStruct)
+    {
+      dataVector.push_back(dataStruct);
+    }
+  }
 
   std::sort(dataVector.begin(), dataVector.end(),
             [](const DataStruct& a, const DataStruct& b)
@@ -86,6 +104,7 @@ int main()
             });
 
   const std::ostream_iterator<DataStruct> out(std::cout, "\n");
+  std::cout << "OUTPUT:\n";
   std::copy(dataVector.begin(), dataVector.end(), out);
 
   return 0;

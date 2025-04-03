@@ -12,7 +12,7 @@ std::istream& operator>>(std::istream& in, DataStruct& data)
 
   std::string line;
   std::smatch match;
-  const std::regex lineRegex(R"(\(:([^:]+:){3}\))");
+  const std::regex lineRegex(R"(\(:([^:\"\s]+\s(?:[^\s:"]+|\"[^\"]*\")+:){3}\))");
   const std::regex key1Regex(R"(:key1\s([-+]?[1-9]\.\d+[eE][-+]\d+):)");
   const std::regex key2Regex(R"(:key2\s([-+]?\d+((ll)|(LL))):)");
   const std::regex key3Regex(R"(:key3\s"(.+)\":)");

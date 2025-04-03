@@ -28,4 +28,6 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data);
 
 bool compareDataStructs(const DataStruct& a, const DataStruct& b);
 
+std::string convertDoubleToScientificString(double value);
+
 #endif //DATASTRUCT_H

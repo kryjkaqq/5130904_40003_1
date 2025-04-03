@@ -60,13 +60,9 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data)
     return out;
   }
 
-  {
-    StreamGuard guard(out);
-
-    out << "(:key1 " << std::scientific << std::setprecision(1) << data.key1
-      << ":key2 " << data.key2 << "ll"
-      << ":key3 \"" << data.key3 << "\":)";
-  }
+  out << "(:key1 " << convertDoubleToScientificString(data.key1)
+    << ":key2 " << data.key2 << "ll"
+    << ":key3 \"" << data.key3 << "\":)";
 
   return out;
 }
@@ -95,4 +91,34 @@ StreamGuard::~StreamGuard()
 {
   s_.precision(precision_);
   s_.flags(fmt_);
+}
+
+std::string convertDoubleToScientificString(const double value)
+{
+  /**
+   * Formats a double in scientific notation with minimal exponent formatting.
+   * Standard std::scientific is not used directly because it always pads the exponent
+   * with leading zeros (e.g., e-01 instead of e-1).
+   **/
+
+  std::stringstream ss;
+  StreamGuard guard(ss);
+  ss << std::scientific << std::setprecision(1) << value;
+  std::string result = ss.str();
+
+  size_t pos = result.find("e-0");
+  if (pos != std::string::npos)
+  {
+    result.erase(pos + 2, 1);
+  }
+  else
+  {
+    pos = result.find("e+0");
+    if (pos != std::string::npos)
+    {
+      result.erase(pos + 2, 1);
+    }
+  }
+
+  return result;
 }

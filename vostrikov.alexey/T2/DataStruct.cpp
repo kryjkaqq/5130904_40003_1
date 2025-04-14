@@ -34,7 +34,7 @@ namespace mydatastruct {
     out << std::scientific << std::setprecision(6) << num;
     std::string str = out.str();
 
-    int e = str.find('e');
+    size_t e = str.find('e');
     std::string mantissa = str.substr(0, e);
     std::string exponent = str.substr(e + 1);
 
@@ -46,7 +46,7 @@ namespace mydatastruct {
     }
 
     char sign = exponent[0];
-    int start = 1;
+    size_t start = 1;
     while (start < exponent.size() and exponent[start] == '0') {
       ++start;
     }

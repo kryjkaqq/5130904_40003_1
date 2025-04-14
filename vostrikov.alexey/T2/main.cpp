@@ -12,9 +12,6 @@ int main()
     std::vector<DataStruct> v;
     fillvector(v);
 
-    std::copy(v.begin(),v.end(), std::ostream_iterator<DataStruct>(std::cout ,"\n"));
-    std::cout << std::endl;
-
     std::sort(v.begin(), v.end(), datastructSort);
 
     std::copy(v.begin(),v.end(), std::ostream_iterator<DataStruct>(std::cout ,"\n"));

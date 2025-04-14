@@ -42,7 +42,7 @@ namespace mydatastruct {
       mantissa.pop_back();
     }
     if (mantissa.back() == '.') {
-      mantissa.pop_back();
+      mantissa += '0';
     }
 
     char sign = exponent[0];

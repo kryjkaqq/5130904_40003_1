@@ -46,7 +46,9 @@ namespace
         {
             return in;
         }
-        in >> DelimetrIO{'0'} >> dest.ref >> DelimetrIO{':'};
+        in >> DelimetrIO{'0'}
+           >> std::oct >> dest.ref
+           >> std::dec >> DelimetrIO{':'};
         return in;
     }
 

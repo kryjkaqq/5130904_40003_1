@@ -1,17 +1,27 @@
 #include "Operations.h"
+#include <sstream>
 #include <algorithm>
 #include <iterator>
 
 std::vector<DataStruct> readDataFromStream(std::istream& in)
 {
     std::vector<DataStruct> dataVector;
-    DataStruct ds;
-    while (in >> ds) {
-        dataVector.push_back(ds);
+    std::string line;
+
+    while (std::getline(in, line))
+    {
+        std::istringstream iss(line);
+        DataStruct ds;
+
+        if (iss >> ds)
+        {
+            dataVector.push_back(ds);
+        }
     }
-    in.clear(std::ios_base::goodbit);
+
     return dataVector;
 }
+
 
 void writeDataToStream(std::ostream& out, const std::vector<DataStruct>& data)
 {

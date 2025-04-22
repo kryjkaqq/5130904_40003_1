@@ -3,21 +3,21 @@
 #include <cctype>
 
 namespace {
-    bool parseKey1(std::istream& in, DataStruct& data) 
+    bool parseKey1(std::istream& in, DataStruct& data)
     {
         char quote;
 
-        if (!(in >> quote) || quote != '\'') 
+        if (!(in >> quote) || quote != '\'')
         {
             return false;
         }
 
-        if (!(in >> data.key1)) 
+        if (!(in >> data.key1))
         {
             return false;
         }
 
-        if (!(in >> quote) || quote != '\'') 
+        if (!(in >> quote) || quote != '\'')
         {
             return false;
         }
@@ -28,27 +28,27 @@ namespace {
     const int ASCII_ZER0 = 48;
     const int ASCII_NINE = 57;
 
-    bool parseKey2(std::istream& in, DataStruct& data) 
+    bool parseKey2(std::istream& in, DataStruct& data)
     {
         char c;
         std::string token;
 
-        if (!(in >> c) || c != '(') 
+        if (!(in >> c) || c != '(')
         {
             return false;
         }
 
-        if (!(in >> token) || token != ":N") 
+        if (!(in >> token) || token != ":N")
         {
             return false;
         }
 
-        if (!(in >> data.key2.first)) 
+        if (!(in >> data.key2.first))
         {
             return false;
         }
 
-        if (!(in >> token) || token != ":D") 
+        if (!(in >> token) || token != ":D")
         {
             return false;
         }
@@ -84,18 +84,18 @@ namespace {
     }
 
 
-    bool parseKey3(std::istream& in, DataStruct& data) 
+    bool parseKey3(std::istream& in, DataStruct& data)
     {
         char quote;
 
-        if (!(in >> quote) || quote != '"') 
+        if (!(in >> quote) || quote != '"')
         {
             return false;
         }
 
         std::getline(in, data.key3, '"');
 
-        if (in.peek() == '\n') 
+        if (in.peek() == '\n')
         {
             in.get();
         }
@@ -104,13 +104,13 @@ namespace {
 
 }
 
-std::istream& operator>>(std::istream& in, DataStruct& data) 
+std::istream& operator>>(std::istream& in, DataStruct& data)
 {
     DataStruct temp;
     char c;
     std::string key;
 
-    if (!(in >> c) || c != '(') 
+    if (!(in >> c) || c != '(')
     {
         in.setstate(std::ios::failbit);
         return in;
@@ -126,65 +126,65 @@ std::istream& operator>>(std::istream& in, DataStruct& data)
             break;
         }
 
-        if (!(in >> c) || c != ':') 
+        if (!(in >> c) || c != ':')
         {
             in.setstate(std::ios::failbit);
             return in;
         }
 
-        if (!(in >> key)) 
+        if (!(in >> key))
         {
             in.setstate(std::ios::failbit);
             return in;
         }
 
-        if (key == "key1") 
+        if (key == "key1")
         {
-            if (!parseKey1(in, temp)) 
+            if (!parseKey1(in, temp))
             {
                 in.setstate(std::ios::failbit);
                 return in;
             }
             hasKey1 = true;
         }
-        else if (key == "key2") 
+        else if (key == "key2")
         {
-            if (!parseKey2(in, temp)) 
+            if (!parseKey2(in, temp))
             {
                 in.setstate(std::ios::failbit);
                 return in;
             }
             hasKey2 = true;
         }
-        else if (key == "key3") 
+        else if (key == "key3")
         {
-            if (!parseKey3(in, temp)) 
+            if (!parseKey3(in, temp))
             {
                 in.setstate(std::ios::failbit);
                 return in;
             }
             hasKey3 = true;
         }
-        else 
+        else
         {
             in.setstate(std::ios::failbit);
             return in;
         }
     }
 
-    if (!hasKey1 || !hasKey2 || !hasKey3) 
+    if (!hasKey1 || !hasKey2 || !hasKey3)
     {
         in.setstate(std::ios::failbit);
         return in;
     }
 
-    if (!(in >> c) || c != ':') 
+    if (!(in >> c) || c != ':')
     {
         in.setstate(std::ios::failbit);
         return in;
     }
 
-    if (!(in >> c) || c != ')') 
+    if (!(in >> c) || c != ')')
     {
         in.setstate(std::ios::failbit);
         return in;
@@ -195,7 +195,7 @@ std::istream& operator>>(std::istream& in, DataStruct& data)
 }
 
 
-std::ostream& operator<<(std::ostream& out, const DataStruct& data) 
+std::ostream& operator<<(std::ostream& out, const DataStruct& data)
 {
     out << "(:key1 '" << data.key1 << "'"
         << ":key2 (:N " << data.key2.first << ":D " << data.key2.second << ":)"

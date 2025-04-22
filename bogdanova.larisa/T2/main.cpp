@@ -5,11 +5,11 @@
 #include "DataStruct.h"
 #include "Operations.h"
 
-               
-int main() 
+
+int main()
 {
     auto data = readDataFromStream(std::cin);
-    if (data.empty()) 
+    if (data.empty())
     {
         std::cout << "No valid data entered.\n";
         return 0;

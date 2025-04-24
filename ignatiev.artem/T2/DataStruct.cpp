@@ -109,3 +109,4 @@ bool compareDataStructs(const DataStruct& a, const DataStruct& b) {
         return ma < mb;
     return a.key3.size() < b.key3.size();
 }
+

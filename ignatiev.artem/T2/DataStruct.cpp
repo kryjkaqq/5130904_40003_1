@@ -3,13 +3,6 @@
 #include <iomanip>
 #include <cctype>
 
-static void trim(std::string& s) {
-    size_t i = 0, j = s.size();
-    while (i < j && std::isspace(s[i])) ++i;
-    while (j > i && std::isspace(s[j-1])) --j;
-    s = s.substr(i, j - i);
-}
-
 std::istream& operator>>(std::istream& in, DataStruct& data) {
     std::string line;
     bool parsed = false;

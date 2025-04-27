@@ -279,7 +279,6 @@ void begin(const std::ifstream& ifs)
       [](const Polygon& polygon) { return !polygon.isCorrect; }
     ), polygons.end()
   );
-  std::cout << "after erase:\n";
   printPolygons(polygons);
 
 

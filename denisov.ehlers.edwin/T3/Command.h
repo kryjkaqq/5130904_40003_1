@@ -49,6 +49,13 @@ int countByVertexCondition(const std::vector<Polygon>& polygons, const std::stri
 
 int countByVertexCondition(const std::vector<Polygon>& polygons, unsigned int numOfVertexes);
 
+int echoImplementation(std::vector<Polygon>& polygons,
+                       const Polygon& polygon, std::vector<Polygon>::iterator it, int count);
+
+int echo(std::vector<Polygon>& polygons, const Polygon& polygon);
+
+bool isInFrame(std::vector<Polygon>& polygons, const Polygon& polygon);
+
 bool handleCommand(const std::vector<Polygon>& polygons, const Command& command);
 
 void begin(const std::ifstream& ifs);

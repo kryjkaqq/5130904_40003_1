@@ -3,12 +3,6 @@
 
 #include "Command.h"
 
-// 5 variant
-// AREA ODD EVEN MEAN NUM-OF-VERT
-// MAX|MIN AREA | VERTEXES
-// COUNT EVEN ODD NUM-OF-VERT
-// ECHO
-// INFRAME
 
 int main(const int argc, char* argv[])
 {
@@ -27,6 +21,5 @@ int main(const int argc, char* argv[])
   }
 
   begin(ifs);
-
   return 0;
 }

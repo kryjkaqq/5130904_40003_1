@@ -10,6 +10,19 @@ auto polygonVertexesComparator = [](const Polygon& a, const Polygon& b)
   return a.points.size() < b.points.size();
 };
 
+void printPolygons(std::vector<Polygon>& polygons)
+{
+  for (Polygon& polygon : polygons)
+  {
+    std::cout << "isCorrect: " << polygon.isCorrect << " size: " << polygon.points.size();
+    for (const Point& point : polygon.points)
+    {
+      std::cout << " (" << point.x << ";" << point.y << ")";
+    }
+    std::cout << "\n";
+  }
+}
+
 double getTotalArea(const std::vector<Polygon>& polygons, const std::string& parity)
 {
   if (parity == "EVEN")
@@ -123,19 +136,76 @@ int countByVertexCondition(const std::vector<Polygon>& polygons, const unsigned 
 {
   return static_cast<int>(std::count_if(
     polygons.begin(), polygons.end(),
-    [numOfVertexes](const Polygon& polygon) { return polygon.points.size() == numOfVertexes; }
+    [numOfVertexes](const Polygon& polygon)
+    {
+      return polygon.points.size() == numOfVertexes;
+    }
   ));
 }
 
-bool handleCommand(const std::vector<Polygon>& polygons, const Command& command)
+int echoImplementation(std::vector<Polygon>& polygons, const Polygon& polygon,
+                       std::vector<Polygon>::iterator it, int count)
+{
+  if (it == polygons.end())
+  {
+    return count;
+  }
+
+  if (*it == polygon)
+  {
+    it = polygons.insert(std::next(it), polygon);
+    ++count;
+    return echoImplementation(polygons, polygon, std::next(it), count);
+  }
+  return echoImplementation(polygons, polygon, std::next(it), count);
+}
+
+int echo(std::vector<Polygon>& polygons, const Polygon& polygon)
+{
+  return echoImplementation(polygons, polygon, polygons.begin(), 0);
+}
+
+bool isInFrame(std::vector<Polygon>& polygons, const Polygon& polygon)
+{
+  if (polygons.empty())
+  {
+    return false;
+  }
+
+  int minX = std::min_element(
+    polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) { return a.getMinX() < b.getMinX(); }
+  )->getMinX();
+  int minY = std::min_element(
+    polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) { return a.getMinY() < b.getMinY(); }
+  )->getMinY();
+  int maxX = std::max_element(
+    polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) { return a.getMaxX() < b.getMaxX(); }
+  )->getMaxX();
+  int maxY = std::max_element(
+    polygons.begin(), polygons.end(),
+    [](const Polygon& a, const Polygon& b) { return a.getMaxY() < b.getMaxY(); }
+  )->getMaxY();
+
+  if (minX <= polygon.getMinX() && minY <= polygon.getMinY() &&
+    maxX >= polygon.getMaxX() && maxY >= polygon.getMaxY())
+  {
+    return true;
+  }
+  return false;
+}
+
+bool handleCommand(std::vector<Polygon>& polygons, const Command& command)
 {
   StreamGuard streamGuard(std::cout);
   const auto areaRegex = std::regex(R"(AREA (EVEN|ODD|MEAN|\d+))");
   const auto maxRegex = std::regex(R"(MAX (AREA|VERTEXES))");
   const auto minRegex = std::regex(R"(MIN (AREA|VERTEXES))");
   const auto countRegex = std::regex(R"(COUNT (EVEN|ODD|\d+))");
-  const auto echoRegex = std::regex(R"(ECHO)");
-  const auto inframeRegex = std::regex(R"(INFRAME)");
+  const auto echoRegex = std::regex(R"(ECHO .+)");
+  const auto inframeRegex = std::regex(R"(INFRAME .+)");
 
   if (std::regex_match(command.data, areaRegex))
   {
@@ -223,6 +293,30 @@ bool handleCommand(const std::vector<Polygon>& polygons, const Command& command)
       std::cout << countByVertexCondition(polygons, numOfVertexes) << "\n";
     }
   }
+  else if (std::regex_match(command.data, echoRegex))
+  {
+    std::istringstream iss(command.data.substr(5));
+    Polygon polygon;
+    iss >> polygon;
+    if (!polygon.isCorrect)
+    {
+      std::cout << INVALID_COMMAND;
+      return false;
+    }
+    std::cout << echo(polygons, polygon) << "\n";
+  }
+  else if (std::regex_match(command.data, inframeRegex))
+  {
+    std::istringstream iss(command.data.substr(8));
+    Polygon polygon;
+    iss >> polygon;
+    if (!polygon.isCorrect)
+    {
+      std::cout << INVALID_COMMAND;
+      return false;
+    }
+    std::cout << (isInFrame(polygons, polygon) ? "<TRUE>" : "<FALSE>") << "\n";
+  }
   else
   {
     std::cout << INVALID_COMMAND;
@@ -238,19 +332,6 @@ std::vector<std::string> splitLines(const std::string& str)
   std::sregex_token_iterator first(str.begin(), str.end(), re, -1);
   std::sregex_token_iterator last;
   return {first, last};
-}
-
-void printPolygons(std::vector<Polygon> &polygons)
-{
-  for (Polygon& polygon : polygons)
-  {
-    std::cout << "isCorrect: " << polygon.isCorrect << " size: " << polygon.points.size();
-    for (const Point& point : polygon.points)
-    {
-      std::cout << " (" << point.x << ";" << point.y << ")";
-    }
-    std::cout << "\n";
-  }
 }
 
 void begin(const std::ifstream& ifs)
@@ -284,6 +365,9 @@ void begin(const std::ifstream& ifs)
   std::copy_if(std::istream_iterator<Command>(std::cin),
                std::istream_iterator<Command>(),
                std::back_inserter(commands),
-               [&polygons](const Command& command) { return handleCommand(polygons, command); }
+               [&polygons](const Command& command)
+               {
+                 return handleCommand(polygons, command);
+               }
   );
 }

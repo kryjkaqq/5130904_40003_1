@@ -279,9 +279,6 @@ void begin(const std::ifstream& ifs)
       [](const Polygon& polygon) { return !polygon.isCorrect; }
     ), polygons.end()
   );
-  printPolygons(polygons);
-
-
 
   std::vector<Command> commands;
   std::copy_if(std::istream_iterator<Command>(std::cin),

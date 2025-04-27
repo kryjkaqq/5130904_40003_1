@@ -2,10 +2,10 @@
 #define POLYGON_H
 #include <iostream>
 #include <istream>
-#include <limits>
 #include <numeric>
 #include <vector>
 #include <regex>
+#include <string>
 
 
 struct Point
@@ -41,6 +41,7 @@ struct Point
 struct Polygon
 {
   std::vector<Point> points;
+  bool isCorrect = true;
 
   double getArea() const
   {
@@ -98,26 +99,36 @@ inline std::istream& operator>>(std::istream& in, Polygon& polygon)
   const std::istream::sentry sentry(in);
   if (!sentry)
   {
+    polygon.isCorrect = false;
     return in;
   }
 
+  polygon.points.clear();
   unsigned int pointsCount = 0;
-  if (!(in >> pointsCount))
+  if (!(in >> pointsCount) || pointsCount == 0)
   {
-    in.clear();
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    polygon.isCorrect = false;
     return in;
   }
   in.ignore();
 
-  polygon.points.clear();
+  std::string line;
+  std::getline(in, line);
+  std::istringstream iss(line);
 
-  if (!readPoints(in, polygon.points, pointsCount))
+
+  if (!readPoints(iss, polygon.points, pointsCount))
   {
-    in.clear();
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    polygon.points.clear();
+    polygon.isCorrect = false;
     return in;
+  }
+  if (iss >> std::ws && !iss.eof())
+  {
+    polygon.isCorrect = false;
+  }
+  if (polygon.points.size() != pointsCount || pointsCount < 3)
+  {
+    polygon.isCorrect = false;
   }
 
   return in;

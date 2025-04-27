@@ -60,7 +60,7 @@ double getTotalArea(const std::vector<Polygon>& polygons, const unsigned int num
     {
       return sum + (polygon.points.size() == numOfVertexes ? polygon.getArea() : 0.0);
     }
-  ) / static_cast<double>(polygons.size());
+  );
 }
 
 double getMaxArea(const std::vector<Polygon>& polygons)
@@ -160,6 +160,11 @@ bool handleCommand(const std::vector<Polygon>& polygons, const Command& command)
     else
     {
       const unsigned int numOfVertexes = std::stoi(command.data.substr(5));
+      if (numOfVertexes < 3)
+      {
+        std::cout << INVALID_COMMAND;
+        return false;
+      }
       std::cout << getTotalArea(polygons, numOfVertexes) << "\n";
     }
   }
@@ -210,6 +215,11 @@ bool handleCommand(const std::vector<Polygon>& polygons, const Command& command)
     else
     {
       const unsigned int numOfVertexes = std::stoi(command.data.substr(6));
+      if (numOfVertexes < 3)
+      {
+        std::cout << INVALID_COMMAND;
+        return false;
+      }
       std::cout << countByVertexCondition(polygons, numOfVertexes) << "\n";
     }
   }
@@ -222,14 +232,57 @@ bool handleCommand(const std::vector<Polygon>& polygons, const Command& command)
   return true;
 }
 
-void begin(std::ifstream& ifs)
+std::vector<std::string> splitLines(const std::string& str)
 {
+  const std::regex re("\n");
+  std::sregex_token_iterator first(str.begin(), str.end(), re, -1);
+  std::sregex_token_iterator last;
+  return {first, last};
+}
+
+void printPolygons(std::vector<Polygon> &polygons)
+{
+  for (Polygon& polygon : polygons)
+  {
+    std::cout << "isCorrect: " << polygon.isCorrect << " size: " << polygon.points.size();
+    for (const Point& point : polygon.points)
+    {
+      std::cout << " (" << point.x << ";" << point.y << ")";
+    }
+    std::cout << "\n";
+  }
+}
+
+void begin(const std::ifstream& ifs)
+{
+  std::stringstream buffer;
+  buffer << ifs.rdbuf();
+  std::vector<std::string> polygonsStr = splitLines(buffer.str());
+
   std::vector<Polygon> polygons;
-  std::copy_if(std::istream_iterator<Polygon>(ifs),
-               std::istream_iterator<Polygon>(),
-               std::back_inserter(polygons),
-               [](const Polygon& polygon) { return !polygon.points.empty(); }
+  std::transform(
+    polygonsStr.begin(),
+    polygonsStr.end(),
+    std::back_inserter(polygons),
+    [](const std::string& line)
+    {
+      std::istringstream iss(line);
+      Polygon polygon;
+      iss >> polygon;
+      return polygon;
+    });
+
+  polygons.erase(
+    std::remove_if(
+      polygons.begin(),
+      polygons.end(),
+      [](const Polygon& polygon) { return !polygon.isCorrect; }
+    ), polygons.end()
   );
+  std::cout << "after erase:\n";
+  printPolygons(polygons);
+
+
 
   std::vector<Command> commands;
   std::copy_if(std::istream_iterator<Command>(std::cin),

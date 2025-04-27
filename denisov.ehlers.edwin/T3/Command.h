@@ -51,7 +51,7 @@ int countByVertexCondition(const std::vector<Polygon>& polygons, unsigned int nu
 
 bool handleCommand(const std::vector<Polygon>& polygons, const Command& command);
 
-void begin(std::ifstream& ifs);
+void begin(const std::ifstream& ifs);
 
 
 #endif //COMMAND_H

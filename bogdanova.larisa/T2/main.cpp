@@ -1,7 +1,4 @@
-﻿#include <iostream>
-#include <vector>
-#include <sstream>
-#include <algorithm>
+﻿#include <algorithm>
 #include "DataStruct.h"
 #include "Operations.h"
 

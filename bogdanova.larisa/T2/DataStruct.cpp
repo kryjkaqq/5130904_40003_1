@@ -3,26 +3,26 @@
 #include <cctype>
 
 namespace {
+
+    bool checkInputChar(std::istream& in, const char& symbolToCheck)
+    {
+        char c = '\0';
+        return (in >> c) && c == symbolToCheck;
+    }
+    bool checkInputString(std::istream& in, const std::string& stringToCheck)
+    {
+        std::string token = "";
+        return (in >> token) && token == stringToCheck;
+    }
+
     bool parseKey1(std::istream& in, DataStruct& data)
     {
-        char quote;
-
-        if (!(in >> quote) || quote != '\'')
+        bool mask = checkInputChar(in, '\'') && in >> data.key1 && checkInputChar(in, '\'');
+        if (mask)
         {
-            return false;
+            return true;
         }
-
-        if (!(in >> data.key1))
-        {
-            return false;
-        }
-
-        if (!(in >> quote) || quote != '\'')
-        {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     const int ASCII_ZER0 = 48;
@@ -33,22 +33,10 @@ namespace {
         char c;
         std::string token;
 
-        if (!(in >> c) || c != '(')
-        {
-            return false;
-        }
+        bool mask = checkInputChar(in, '(') && checkInputString(in, ":N") && in >> data.key2.first
+            && checkInputString(in, ":D");
 
-        if (!(in >> token) || token != ":N")
-        {
-            return false;
-        }
-
-        if (!(in >> data.key2.first))
-        {
-            return false;
-        }
-
-        if (!(in >> token) || token != ":D")
+        if (!mask)
         {
             return false;
         }
@@ -75,12 +63,7 @@ namespace {
             return false;
         }
 
-        if (!(in >> c) || c != ')')
-        {
-            return false;
-        }
-
-        return true;
+        return checkInputChar(in, ')');
     }
 
 
@@ -88,7 +71,7 @@ namespace {
     {
         char quote;
 
-        if (!(in >> quote) || quote != '"')
+        if (!checkInputChar(in, '"'))
         {
             return false;
         }
@@ -110,7 +93,7 @@ std::istream& operator>>(std::istream& in, DataStruct& data)
     char c;
     std::string key;
 
-    if (!(in >> c) || c != '(')
+    if (!checkInputChar(in, '('))
     {
         in.setstate(std::ios::failbit);
         return in;
@@ -126,7 +109,7 @@ std::istream& operator>>(std::istream& in, DataStruct& data)
             break;
         }
 
-        if (!(in >> c) || c != ':')
+        if (!checkInputChar(in, ':'))
         {
             in.setstate(std::ios::failbit);
             return in;
@@ -178,13 +161,7 @@ std::istream& operator>>(std::istream& in, DataStruct& data)
         return in;
     }
 
-    if (!(in >> c) || c != ':')
-    {
-        in.setstate(std::ios::failbit);
-        return in;
-    }
-
-    if (!(in >> c) || c != ')')
+    if (!checkInputChar(in, ':') || !checkInputChar(in, ')'))
     {
         in.setstate(std::ios::failbit);
         return in;
@@ -206,11 +183,17 @@ std::ostream& operator<<(std::ostream& out, const DataStruct& data)
 
 bool compareDataStruct(const DataStruct& a, const DataStruct& b)
 {
-    if (a.key1 != b.key1) return a.key1 < b.key1;
+    if (a.key1 != b.key1)
+    {
+        return std::abs(a.key1) < std::abs(b.key1);
+    }
 
     const long long left = a.key2.first * static_cast<long long>(b.key2.second);
     const long long right = b.key2.first * static_cast<long long>(a.key2.second);
-    if (left != right) return left < right;
+    if (left != right)
+    {
+        return left < right;
+    }
 
     if (a.key3.size() != b.key3.size())
     {

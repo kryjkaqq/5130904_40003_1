@@ -69,8 +69,6 @@ namespace {
 
     bool parseKey3(std::istream& in, DataStruct& data)
     {
-        char quote;
-
         if (!checkInputChar(in, '"'))
         {
             return false;
@@ -90,7 +88,6 @@ namespace {
 std::istream& operator>>(std::istream& in, DataStruct& data)
 {
     DataStruct temp;
-    char c;
     std::string key;
 
     if (!checkInputChar(in, '('))

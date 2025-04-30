@@ -47,7 +47,6 @@ void figures_input(const std::string &filename, std::vector<Polygon> &polygons)
 
     if (std::regex_search(line,match,CORRECT_lINE))
     {
-
       long unsigned int vert = std::stoul(match.str(1));
       std::vector<Point> form_vertex;
 
@@ -58,7 +57,7 @@ void figures_input(const std::string &filename, std::vector<Polygon> &polygons)
               form_vertex.push_back(Point(std::stoi(match.str(1)), std::stoi(match.str(2))));
           }
       );
-      if (form_vertex.size() == vert)
+      if (form_vertex.size() == vert and vert > 2)
       {
         polygons.push_back(Polygon(form_vertex));
         form_vertex.clear();
@@ -71,7 +70,7 @@ void figures_input(const std::string &filename, std::vector<Polygon> &polygons)
     }
     else
     {
-      throw std::invalid_argument("Wrong line format");
+      continue;
     }
   }
 
@@ -109,12 +108,12 @@ void command_process_recursive(std::vector<Polygon> &figures)
 
 void command_process(std::string line, std::vector<Polygon> &figures)
 {
-  const std::regex AREA(R"(AREA (.+))");
-  const std::regex MAX(R"(MAX (.+))");
-  const std::regex MIN(R"(MIN (.+))");
-  const std::regex COUNT(R"(COUNT (.+))");
-  const std::regex ECHO(R"(ECHO (\d+)((?: \(-?\d+;-?\d+\))+)?)");
-  const std::regex INFRAME(R"(INFRAME (\d+)((?: \(-?\d+;-?\d+\))+)?)");
+  const std::regex AREA(R"(^AREA (.+))");
+  const std::regex MAX(R"(^MAX (.+))");
+  const std::regex MIN(R"(^MIN (.+))");
+  const std::regex COUNT(R"(^COUNT (.+))");
+  const std::regex ECHO(R"(^ECHO (\d+)((?: \(-?\d*;-?\d*\))+)?)");
+  const std::regex INFRAME(R"(^INFRAME (\d+)((?: \(-?\d*;-?\d*\))+)?)");
 
   std::smatch match;
 
@@ -367,7 +366,7 @@ void command_process(std::string line, std::vector<Polygon> &figures)
       }
       );
 
-    if (form_vertex.size() == vert)
+    if (form_vertex.size() == vert and vert > 2)
     {
 
       std::vector<Polygon> duplicated = std::accumulate(
@@ -409,7 +408,7 @@ void command_process(std::string line, std::vector<Polygon> &figures)
       }
       );
 
-    if (form_vertex.size() == vert)
+    if (form_vertex.size() == vert and vert > 2)
     {
       std::vector<Point> all_points = std::accumulate(
         figures.begin(), figures.end(),

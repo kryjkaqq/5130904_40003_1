@@ -127,10 +127,10 @@ namespace mynsp {
         if (!sentry) {
             return in;
         }
-    
+
         DataStruct input;
         bool hasKey1 = false, hasKey2 = false, hasKey3 = false;
-    
+
         char c = '\0';
         while (in.get(c)) {
             if (c == '(') {
@@ -144,7 +144,7 @@ namespace mynsp {
 
 
         in >> std::ws; // пропускаем пробелы
-    
+
         while (in >> c && c != ')') {
             if (c == ':') {
                 std::string fieldName;
@@ -171,7 +171,7 @@ namespace mynsp {
                     in.setstate(std::ios::failbit);
                     break;
                 }
-    
+
                 if (fieldName == "key1") {
                     if (!(in >> UllLitIO{ input.key1 })) {
                         break;
@@ -193,13 +193,13 @@ namespace mynsp {
                 }
             }
         }
-    
+
         if (in && hasKey1 && hasKey2 && hasKey3) {
             dest = input;
         } else {
             in.setstate(std::ios::failbit);
         }
-    
+
         return in;
     }
 

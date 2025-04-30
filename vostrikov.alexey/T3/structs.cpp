@@ -160,9 +160,15 @@ void command_process(std::string line, std::vector<Polygon> &figures)
         std::placeholders::_1, std::placeholders::_2
       );
 
-      double smArea = std::accumulate(figures.begin(), figures.end(), 0.0, smAr)/figures.size();
-
-      std::cout << smArea << "\n";
+      if (!figures.empty())
+      {
+        double smArea = std::accumulate(figures.begin(), figures.end(), 0.0, smAr)/figures.size();
+        std::cout << smArea << "\n";
+      }
+      else
+      {
+        std::cout << "<INVALID COMMAND>\n";
+      }
     }
     else if (isdigit(match.str(1)[0]))
     {
@@ -200,43 +206,50 @@ void command_process(std::string line, std::vector<Polygon> &figures)
 
   else if (std::regex_search(line,match,MAX))
   {
-    if (match.str(1) == "AREA")
+    if (!figures.empty())
     {
-
-      auto comp = std::bind(
-          std::less<>(),
-          std::bind(area, std::placeholders::_1),
-          std::bind(area, std::placeholders::_2)
-      );
-
-      auto mx = std::max_element(figures.begin(), figures.end(), comp);
-
-      if (mx != figures.end())
+      if (match.str(1) == "AREA")
       {
-        std::cout << area(*mx) << "\n";
-      }
-      else
-      {
-        throw std::invalid_argument("Cannot find max element");
-      }
-    }
-    else if (match.str(1) == "VERTEXES")
-    {
 
-      auto mx = std::max_element(figures.begin(), figures.end(),
-        [](const Polygon &poly1, const Polygon &poly2)
+        auto comp = std::bind(
+            std::less<>(),
+            std::bind(area, std::placeholders::_1),
+            std::bind(area, std::placeholders::_2)
+        );
+
+        auto mx = std::max_element(figures.begin(), figures.end(), comp);
+
+        if (mx != figures.end())
         {
-          return poly1.points_.size() < poly2.points_.size();
+          std::cout << area(*mx) << "\n";
         }
-      );
-
-      if (mx != figures.end())
+        else
+        {
+          throw std::invalid_argument("Cannot find max element");
+        }
+      }
+      else if (match.str(1) == "VERTEXES")
       {
-        std::cout << mx->points_.size() << "\n";
+
+        auto mx = std::max_element(figures.begin(), figures.end(),
+          [](const Polygon &poly1, const Polygon &poly2)
+          {
+            return poly1.points_.size() < poly2.points_.size();
+          }
+        );
+
+        if (mx != figures.end())
+        {
+          std::cout << mx->points_.size() << "\n";
+        }
+        else
+        {
+          throw std::invalid_argument("Cannot find max element");
+        }
       }
       else
       {
-        throw std::invalid_argument("Cannot find max element");
+        std::cout << "<INVALID COMMAND>\n";
       }
     }
     else

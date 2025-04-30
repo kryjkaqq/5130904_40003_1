@@ -29,7 +29,7 @@ void figures_input(const std::string &filename, std::vector<Polygon> &polygons)
     throw std::runtime_error("Filename is empty");
   }
 
-  std::ifstream inputFile("../"+filename);
+  std::ifstream inputFile(filename);
   if (!inputFile) {
     throw std::runtime_error("Cannot open file");
   }
@@ -40,14 +40,17 @@ void figures_input(const std::string &filename, std::vector<Polygon> &polygons)
   const std::regex POINT_PATTERN(R"(\((-?\d+);(-?\d+)\))");
 
   std::smatch match, mch;
-  std::vector<Point> form_vertex;
+
 
   while (std::getline(inputFile, line))
   {
 
     if (std::regex_search(line,match,CORRECT_lINE))
     {
+
       long unsigned int vert = std::stoul(match.str(1));
+      std::vector<Point> form_vertex;
+
       std::for_each(
           std::sregex_iterator(line.begin(), line.end(), POINT_PATTERN),
           std::sregex_iterator(),
@@ -71,6 +74,8 @@ void figures_input(const std::string &filename, std::vector<Polygon> &polygons)
       throw std::invalid_argument("Wrong line format");
     }
   }
+
+  match = std::smatch();
 }
 
 double area(const Polygon &poly)
@@ -462,4 +467,5 @@ void command_process(std::string line, std::vector<Polygon> &figures)
   {
     std::cout << "<INVALID COMMAND>\n";
   }
+  match = std::smatch();
 }

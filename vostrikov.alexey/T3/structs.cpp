@@ -47,7 +47,7 @@ void figures_input(const std::string &filename, std::vector<Polygon> &polygons)
 
     if (std::regex_search(line,match,CORRECT_lINE))
     {
-      int vert = std::stoi(match.str(1));
+      long unsigned int vert = std::stoul(match.str(1));
       std::for_each(
           std::sregex_iterator(line.begin(), line.end(), POINT_PATTERN),
           std::sregex_iterator(),
@@ -350,7 +350,7 @@ void command_process(std::string line, std::vector<Polygon> &figures)
 
     const std::regex POINT_PATTERN(R"(\((-?\d+);(-?\d+)\))");
 
-    int vert = std::stoi(match.str(1));
+    long unsigned int vert = std::stoul(match.str(1));
     std::vector<Point> form_vertex;
     std::transform(
       std::sregex_iterator(line.begin(), line.end(), POINT_PATTERN),
@@ -392,7 +392,7 @@ void command_process(std::string line, std::vector<Polygon> &figures)
 
     const std::regex POINT_PATTERN(R"(\((-?\d+);(-?\d+)\))");
 
-    int vert = std::stoi(match.str(1));
+    long unsigned int vert = std::stoul(match.str(1));
     std::vector<Point> form_vertex;
     std::transform(
       std::sregex_iterator(line.begin(), line.end(), POINT_PATTERN),

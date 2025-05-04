@@ -63,7 +63,7 @@ namespace vurvaa
     {
         if (polygons.empty())
         {
-            throw std::runtime_error("At least one polygon is required for MEAN calculation");
+            throw std::invalid_argument("<INVALID COMMAND>");
         }
 
         double total = std::accumulate(
@@ -97,7 +97,7 @@ namespace vurvaa
     {
         if (polygons.empty())
         {
-            throw std::runtime_error("No polygons to calculate MAX AREA");
+            throw std::invalid_argument("<INVALID COMMAND>");
         }
 
         auto it = std::max_element(
@@ -115,7 +115,7 @@ namespace vurvaa
     {
         if (polygons.empty())
         {
-            throw std::runtime_error("No polygons to calculate MIN AREA");
+            throw std::invalid_argument("<INVALID COMMAND>");
         }
 
         auto it = std::min_element(
@@ -133,7 +133,7 @@ namespace vurvaa
     {
         if (polygons.empty())
         {
-            throw std::runtime_error("No polygons to calculate MAX VERTEXES");
+            throw std::invalid_argument("INVALID COMMAND");
         }
 
         auto it = std::max_element(
@@ -151,7 +151,7 @@ namespace vurvaa
     {
         if (polygons.empty())
         {
-            throw std::runtime_error("No polygons to calculate MIN VERTEXES");
+            throw std::invalid_argument("INVALID COMMAND");
         }
 
         auto it = std::min_element(

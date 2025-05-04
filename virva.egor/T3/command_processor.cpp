@@ -56,7 +56,7 @@ namespace vurvaa
                 handleEcho(in, out);
                 break;
             default:
-                std::cerr << "<INVALID ARGUMENT>\n";
+                std::cerr << "<INVALID COMMAND>\n";
                 in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 break;
             }
@@ -68,7 +68,7 @@ namespace vurvaa
         std::string arg;
         if (!(in >> arg))
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -94,7 +94,7 @@ namespace vurvaa
                 std::size_t n = std::stoul(arg);
                 if (n < 3)
                 {
-                    std::cerr << "<INVALID ARGUMENT>\n";
+                    std::cerr << "<INVALID COMMAND>\n";
                     in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     return;
                 }
@@ -102,12 +102,12 @@ namespace vurvaa
             }
             catch (const std::invalid_argument&)
             {
-                std::cerr << "<INVALID ARGUMENT>\n";
+                std::cerr << "<INVALID COMMAND>\n";
                 in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
             catch (const std::out_of_range&)
             {
-                std::cerr << "<INVALID ARGUMENT>\n";
+                std::cerr << "<INVALID COMMAND>\n";
                 in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
         }
@@ -118,7 +118,7 @@ namespace vurvaa
         std::string arg;
         if (!(in >> arg))
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -140,7 +140,7 @@ namespace vurvaa
                 std::size_t n = std::stoul(arg);
                 if (n < 3)
                 {
-                    std::cerr << "<INVALID ARGUMENT>\n";
+                    std::cerr << "<INVALID COMMAND>\n";
                     in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     return;
                 }
@@ -148,12 +148,12 @@ namespace vurvaa
             }
             catch (const std::invalid_argument&)
             {
-                std::cerr << "<INVALID ARGUMENT>\n";
+                std::cerr << "<INVALID COMMAND>\n";
                 in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
             catch (const std::out_of_range&)
             {
-                std::cerr << "<INVALID ARGUMENT>\n";
+                std::cerr << "<INVALID COMMAND>\n";
                 in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
         }
@@ -164,7 +164,7 @@ namespace vurvaa
         std::string arg;
         if (!(in >> arg))
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -181,7 +181,7 @@ namespace vurvaa
         }
         else
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
@@ -191,7 +191,7 @@ namespace vurvaa
         std::string arg;
         if (!(in >> arg))
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -208,7 +208,7 @@ namespace vurvaa
         }
         else
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
@@ -218,7 +218,7 @@ namespace vurvaa
         Polygon pattern;
         if (!(in >> pattern))
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -233,7 +233,7 @@ namespace vurvaa
         Polygon pattern;
         if (!(in >> pattern))
         {
-            std::cerr << "<INVALID ARGUMENT>\n";
+            std::cerr << "<INVALID COMMAND>\n";
             return;
         }
 

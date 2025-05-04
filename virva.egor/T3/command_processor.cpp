@@ -85,6 +85,12 @@ namespace vurvaa
         }
         else if (arg == "MEAN")
         {
+            if (polygons_.empty())
+            {
+                std::cout << "<INVALID COMMAND>\n";
+                in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                return;
+            }
             out << areaMean(polygons_) << '\n';
         }
         else
@@ -173,10 +179,22 @@ namespace vurvaa
 
         if (arg == "AREA")
         {
+            if (polygons_.empty())
+            {
+                std::cout << "<INVALID COMMAND>\n";
+                in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                return;
+            }
             out << minArea(polygons_) << '\n';
         }
         else if (arg == "VERTEXES")
         {
+            if (polygons_.empty())
+            {
+                std::cout << "<INVALID COMMAND>\n";
+                in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                return;
+            }
             out << minVertices(polygons_) << '\n';
         }
         else
@@ -200,10 +218,22 @@ namespace vurvaa
 
         if (arg == "AREA")
         {
+            if (polygons_.empty())
+            {
+                std::cout << "<INVALID COMMAND>\n";
+                in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                return;
+            }
             out << maxArea(polygons_) << '\n';
         }
         else if (arg == "VERTEXES")
         {
+            if (polygons_.empty())
+            {
+                std::cout << "<INVALID COMMAND>\n";
+                in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                return;
+            }
             out << maxVertices(polygons_) << '\n';
         }
         else
@@ -219,6 +249,8 @@ namespace vurvaa
         if (!(in >> pattern))
         {
             std::cout << "<INVALID COMMAND>\n";
+            in.clear();
+            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return;
         }
 
@@ -234,6 +266,8 @@ namespace vurvaa
         if (!(in >> pattern))
         {
             std::cout << "<INVALID COMMAND>\n";
+            in.clear();
+            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return;
         }
 

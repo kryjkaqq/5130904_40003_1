@@ -15,12 +15,14 @@ namespace
         {
             return in;
         }
+
         char ch = 0;
         in >> ch;
         if (in && (ch != dest.exp))
         {
             in.setstate(std::ios::failbit);
         }
+
         return in;
     }
 }
@@ -59,20 +61,31 @@ std::istream& vurvaa::operator>>(std::istream& in, Polygon& dest)
     Polygon input{};
     {
         using sep = DelimetrIO;
-        int num = 0;
+        size_t num = 0;
         in >> num;
         if (num < 3)
         {
             in.setstate(std::ios::failbit);
         }
 
-        for (int i = 0; i < num; i++)
+        for (size_t i = 0; i < num; ++i)
         {
+            if (in.peek() == EOF || in.peek() == '\n')
+            {
+                in.setstate(std::ios::failbit);
+            }
+
             Point temp{};
             in >> sep{ '(' } >> temp.x;
             in >> sep{ ';' } >> temp.y;
             in >> sep{ ')' };
             input.points.push_back(temp);
+        }
+
+        int c = in.peek();
+        if (c != '\n' && c != EOF)
+        {
+            in.setstate(std::ios::failbit);
         }
     }
 
@@ -80,5 +93,6 @@ std::istream& vurvaa::operator>>(std::istream& in, Polygon& dest)
     {
         dest = input;
     }
+
     return in;
 }

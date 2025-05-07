@@ -60,6 +60,8 @@ namespace mynsp {
     std::ostream& operator<<(std::ostream& out, const DataStruct& dest);
 
     bool compareDataStruct(const DataStruct& a, const DataStruct& b);
+
+    std::string readDigitsOrAlpha(std::istream& in, bool allowAlpha);
 }
 
 #endif //DATASTRUCT_H

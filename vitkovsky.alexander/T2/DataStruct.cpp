@@ -20,23 +20,30 @@ namespace mynsp {
         return in;
     }
 
-    std::istream& operator>>(std::istream& in, UllLitIO&& dest) {
-        std::istream::sentry sentry(in);
-        if (!sentry) {
-            return in;
-        }
-
+    std::string readDigitsOrAlpha(std::istream& in, bool allowAlpha) {
         std::string str;
         char ch;
-
         while (in.get(ch)) {
-            if (std::isdigit(ch) || std::isalpha(ch)) {
+            bool isDigit = std::isdigit(static_cast<unsigned char>(ch));
+            bool isAlpha = allowAlpha && std::isalpha(static_cast<unsigned char>(ch));
+
+            if (isDigit || isAlpha) {
                 str += ch;
             } else {
                 in.unget();
                 break;
             }
         }
+        return str;
+    }
+
+    std::istream& operator>>(std::istream& in, UllLitIO&& dest) {
+        std::istream::sentry sentry(in);
+        if (!sentry) {
+            return in;
+        }
+
+        std::string str = readDigitsOrAlpha(in, true);
 
         if (str.size() < 4) { //суффикс и >0 цифр
             in.setstate(std::ios::failbit);
@@ -73,17 +80,7 @@ namespace mynsp {
             return in;
         }
 
-        std::string str;
-        char ch;
-
-        while (in.get(ch)) {
-            if (std::isdigit(ch)) {
-                str += ch;
-            } else {
-                in.unget();
-                break;
-            }
-        }
+        std::string str = readDigitsOrAlpha(in, false);
 
         try {
             size_t pos = 0;

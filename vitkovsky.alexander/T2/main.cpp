@@ -15,6 +15,7 @@ int main() {
         if (std::cin >> temp) {
             data.push_back(temp);
         } else {
+            if (std::cin.eof()) break; // Проверка на пустой ввод
             std::cin.clear(); // сбрасываем failbit, хотим продолжать
             std::string skip;
             std::getline(std::cin, skip);

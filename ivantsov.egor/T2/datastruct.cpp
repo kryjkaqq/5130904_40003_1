@@ -23,15 +23,17 @@ static bool parseDoubleLit(const std::string& text, double& value)
   if (lastChar != 'd' && lastChar != 'D') {
     return false;
   }
+
   const std::string numericPart = text.substr(0, text.size() - 1);
-  for (char c : numericPart) {
-    if (c == 'e' || c == 'E') {
-      return false;
-    }
+
+  try {
+    size_t idx = 0;
+    value = std::stod(numericPart, &idx);
+    return idx == numericPart.length();
   }
-  std::istringstream iss(numericPart);
-  iss >> value;
-  return iss && iss.eof();
+  catch (...) {
+    return false;
+  }
 }
 
 static bool parseUllLit(const std::string& text, unsigned long long& value)

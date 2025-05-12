@@ -9,7 +9,7 @@
 
 using namespace std::placeholders;
 
-// Определение статической строковой константы
+
 const std::string GeometryConstants::INVALID_COMMAND_MSG = "<INVALID COMMAND>\n";
 
 bool Point::operator==(const Point& other) const
@@ -52,7 +52,9 @@ double calculateArea(const Polygon& polygon) {
     {
         std::transform(polygon.points.begin(), std::prev(polygon.points.end()),
             std::next(polygon.points.begin()), std::back_inserter(coordsVec),
-            [](const Point& point, const Point& otherPoint) { return std::make_pair(point, otherPoint); });
+            [](const Point& point, const Point& otherPoint) {
+                return std::make_pair(point, otherPoint);
+            });
 
         coordsVec.push_back(std::make_pair(polygon.points.back(), polygon.points.front()));
     }
@@ -320,7 +322,6 @@ void handlePerms(const std::vector<Polygon>& polygons, std::istringstream& iss)
         return;
     }
 
-    // Количество фигур, которые являются перестановкой координат указанной
     size_t count = std::count_if(polygons.begin(), polygons.end(), 
         [&target](const Polygon& poly) {
             if (poly.points.size() != target.points.size()) {
@@ -343,7 +344,6 @@ void handleMaxSeq(const std::vector<Polygon>& polygons, std::istringstream& iss)
         return;
     }
 
-    // Находим максимальное количество идущих подряд фигур, идентичных указанной
     size_t maxSequence = 0;
     size_t currentSequence = 0;
 

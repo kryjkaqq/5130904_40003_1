@@ -9,7 +9,6 @@
 
 using namespace std::placeholders;
 
-
 const std::string GeometryConstants::INVALID_COMMAND_MSG = "<INVALID COMMAND>\n";
 
 bool Point::operator==(const Point& other) const
@@ -69,7 +68,8 @@ bool isNumber(const std::string& str)
 
 bool parsePoint(const std::string& token, Point& point)
 {
-    if (token.size() < GeometryConstants::POINT_TOKEN_MIN_LENGTH || token.front() != '(' || token.back() != ')')
+    if (token.size() < GeometryConstants::POINT_TOKEN_MIN_LENGTH
+        || token.front() != '(' || token.back() != ')')
     {
         return false;
     }
@@ -175,7 +175,8 @@ void handleArea(const std::vector<Polygon>& polygons, std::istringstream& iss)
         size_t vtxCount = static_cast<size_t>(std::stoul(param));
         double total = std::accumulate(polygons.begin(), polygons.end(), 0.0,
             [vtxCount](double sum, const Polygon& poly) {
-                return poly.points.size() == vtxCount ? sum + calculateArea(poly) : sum;
+                return poly.points.size() == vtxCount 
+                    ? sum + calculateArea(poly) : sum;
             });
         std::cout << std::fixed << std::setprecision(1) << total << '\n';
     }
@@ -189,7 +190,8 @@ void handleArea(const std::vector<Polygon>& polygons, std::istringstream& iss)
         {
             double total = std::accumulate(polygons.begin(), polygons.end(), 0.0,
                 [](double sum, const Polygon& poly) {
-                    return poly.points.size() % 2 == 0 ? sum + calculateArea(poly) : sum;
+                    return poly.points.size() % 2 == 0 
+                        ? sum + calculateArea(poly) : sum;
                 });
             std::cout << std::fixed << std::setprecision(1) << total << '\n';
             break;
@@ -199,7 +201,8 @@ void handleArea(const std::vector<Polygon>& polygons, std::istringstream& iss)
         {
             double total = std::accumulate(polygons.begin(), polygons.end(), 0.0,
                 [](double sum, const Polygon& poly) {
-                    return poly.points.size() % 2 != 0 ? sum + calculateArea(poly) : sum;
+                    return poly.points.size() % 2 != 0 
+                        ? sum + calculateArea(poly) : sum;
                 });
             std::cout << std::fixed << std::setprecision(1) << total << '\n';
             break;
@@ -212,8 +215,10 @@ void handleArea(const std::vector<Polygon>& polygons, std::istringstream& iss)
                 std::cout << GeometryConstants::INVALID_COMMAND_MSG;
                 return;
             }
-            double total = std::accumulate(polygons.begin(), polygons.end(), 0.0, areaAccumulator);
-            std::cout << std::fixed << std::setprecision(1) << total / polygons.size() << '\n';
+            double total = std::accumulate(
+                polygons.begin(), polygons.end(), 0.0, areaAccumulator);
+            std::cout << std::fixed << std::setprecision(1) 
+                << total / polygons.size() << '\n';
             break;
         }
 
@@ -223,7 +228,8 @@ void handleArea(const std::vector<Polygon>& polygons, std::istringstream& iss)
     }
 }
 
-void handleMaxMin(const std::vector<Polygon>& polygons, const std::string& command, std::istringstream& iss)
+void handleMaxMin(const std::vector<Polygon>& polygons, 
+    const std::string& command, std::istringstream& iss)
 {
     if (polygons.size() < 1)
     {
@@ -246,7 +252,8 @@ void handleMaxMin(const std::vector<Polygon>& polygons, const std::string& comma
         auto compareAreas = [](const Polygon& a, const Polygon& b) {
             return calculateArea(a) < calculateArea(b);
         };
-        auto it = command == "MAX" ? std::max_element(polygons.begin(), polygons.end(), compareAreas)
+        auto it = command == "MAX"
+            ? std::max_element(polygons.begin(), polygons.end(), compareAreas)
             : std::min_element(polygons.begin(), polygons.end(), compareAreas);
         std::cout << std::fixed << std::setprecision(1) << calculateArea(*it) << '\n';
         break;
@@ -257,7 +264,8 @@ void handleMaxMin(const std::vector<Polygon>& polygons, const std::string& comma
         auto compareVtxCount = [](const Polygon& a, const Polygon& b) {
             return a.points.size() < b.points.size();
         };
-        auto it = command == "MAX" ? std::max_element(polygons.begin(), polygons.end(), compareVtxCount)
+        auto it = command == "MAX"
+            ? std::max_element(polygons.begin(), polygons.end(), compareVtxCount)
             : std::min_element(polygons.begin(), polygons.end(), compareVtxCount);
         std::cout << it->points.size() << '\n';
         break;
@@ -286,7 +294,9 @@ void handleCount(const std::vector<Polygon>& polygons, std::istringstream& iss)
         }
         size_t vtxCount = static_cast<size_t>(std::stoul(param));
         size_t count = std::count_if(polygons.begin(), polygons.end(),
-            [vtxCount](const Polygon& poly) { return poly.points.size() == vtxCount; });
+            [vtxCount](const Polygon& poly) {
+                return poly.points.size() == vtxCount;
+            });
         std::cout << count << '\n';
         return;
     }
@@ -297,14 +307,18 @@ void handleCount(const std::vector<Polygon>& polygons, std::istringstream& iss)
     case GeometryConstants::EVEN:
     {
         size_t count = std::count_if(polygons.begin(), polygons.end(),
-            [](const Polygon& poly) { return poly.points.size() % 2 == 0; });
+            [](const Polygon& poly) {
+                return poly.points.size() % 2 == 0;
+            });
         std::cout << count << '\n';
         break;
     }
     case GeometryConstants::ODD:
     {
         size_t count = std::count_if(polygons.begin(), polygons.end(),
-            [](const Polygon& poly) { return poly.points.size() % 2 != 0; });
+            [](const Polygon& poly) {
+                return poly.points.size() % 2 != 0;
+            });
         std::cout << count << '\n';
         break;
     }
@@ -322,7 +336,7 @@ void handlePerms(const std::vector<Polygon>& polygons, std::istringstream& iss)
         return;
     }
 
-    size_t count = std::count_if(polygons.begin(), polygons.end(), 
+    size_t count = std::count_if(polygons.begin(), polygons.end(),
         [&target](const Polygon& poly) {
             if (poly.points.size() != target.points.size()) {
                 return false;
@@ -347,7 +361,7 @@ void handleMaxSeq(const std::vector<Polygon>& polygons, std::istringstream& iss)
     size_t maxSequence = 0;
     size_t currentSequence = 0;
 
-    std::for_each(polygons.begin(), polygons.end(), 
+    std::for_each(polygons.begin(), polygons.end(),
         [&target, &maxSequence, &currentSequence](const Polygon& poly) {
             if (poly == target) {
                 currentSequence++;
@@ -361,8 +375,11 @@ void handleMaxSeq(const std::vector<Polygon>& polygons, std::istringstream& iss)
 }
 
 void processFileInput(std::vector<Polygon>& polygons,
-    std::unordered_map<std::string, std::function<void(const std::vector<Polygon>&, std::istringstream&)>> handlers,
-    std::unordered_map<std::string, std::function<void(const std::vector<Polygon>&, const std::string&, std::istringstream&)>> maxMinHandlers,
+    std::unordered_map<std::string,
+    std::function<void(const std::vector<Polygon>&, std::istringstream&)>> handlers,
+    std::unordered_map<std::string,
+    std::function<void(const std::vector<Polygon>&, 
+    const std::string&, std::istringstream&)>> maxMinHandlers,
     std::string& line)
 {
     if (std::getline(std::cin, line))
@@ -391,4 +408,4 @@ void processFileInput(std::vector<Polygon>& polygons,
         std::cout << GeometryConstants::INVALID_COMMAND_MSG;
         processFileInput(polygons, handlers, maxMinHandlers, line);
     }
-} 
+}

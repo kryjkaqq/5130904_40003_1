@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GEOMETRY_H
+#define GEOMETRY_H
 
 #include <vector>
 #include <string>
@@ -55,3 +56,5 @@ void processFileInput(std::vector<Polygon>& polygons,
     std::unordered_map<std::string, std::function<void(const std::vector<Polygon>&, std::istringstream&)>> handlers,
     std::unordered_map<std::string, std::function<void(const std::vector<Polygon>&, const std::string&, std::istringstream&)>> maxMinHandlers,
     std::string& line);
+
+#endif
